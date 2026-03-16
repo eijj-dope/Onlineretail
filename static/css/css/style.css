@@ -1,0 +1,86 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap');
+
+body {
+    font-family: 'Roboto', sans-serif;
+    background-color: #f5f6fa;
+    margin: 0;
+    padding: 0;
+}
+
+/* Navbar */
+.navbar {
+    box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+}
+
+/* Cards */
+.card {
+    border-radius: 16px;
+    transition: transform 0.3s, box-shadow 0.3s;
+    cursor: pointer;
+    overflow: hidden;
+}
+
+.card:hover {
+    transform: translateY(-5px);
+    box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+}
+
+/* Buttons */
+.btn {
+    border-radius: 12px;
+    transition: all 0.3s;
+}
+
+.btn-primary {
+    background: linear-gradient(45deg, #6a11cb, #2575fc);
+    border: none;
+}
+
+.btn-primary:hover {
+    transform: scale(1.05);
+    box-shadow: 0 6px 15px rgba(0,0,0,0.2);
+}
+
+.btn-success {
+    background: linear-gradient(45deg, #00b09b, #96c93d);
+    border: none;
+}
+
+.btn-success:hover {
+    transform: scale(1.05);
+    box-shadow: 0 6px 15px rgba(0,0,0,0.2);
+}
+
+/* Inputs */
+input.form-control, select.form-select {
+    border-radius: 10px;
+    border: 1px solid #ced4da;
+    transition: 0.3s;
+}
+
+input.form-control:focus, select.form-select:focus {
+    box-shadow: 0 0 10px rgba(0,123,255,0.3);
+    border-color: #2575fc;
+    outline: none;
+}
+
+/* Toast container */
+#toast {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    min-width: 200px;
+    background-color: #333;
+    color: #fff;
+    padding: 12px 18px;
+    border-radius: 10px;
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.5s, transform 0.5s;
+    z-index: 9999;
+}
+
+#toast.show {
+    opacity: 1;
+    transform: translateY(-10px);
+}
