@@ -1,13 +1,30 @@
-// Add product to cart
-function addToCart(productId){
+function addToCart(productId) {
+    console.log("Clicked product:", productId);
+
+    // ✅ GET quantity from input
+    let quantity = document.getElementById(`qty-${productId}`).value;
+
     fetch("/add_to_cart", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ product_id: productId })
+        headers: {
+            "Content-Type": "application/json"
+        },
+        body: JSON.stringify({ 
+            product_id: productId,
+            quantity: quantity  // ✅ ADD THIS
+        })
     })
-    .then(res => res.json())
-    .then(data => showToast(data.message))
-    .catch(err => showToast("Error adding to cart"));
+    .then(response => {
+        console.log("Response status:", response.status);
+        return response.json();
+    })
+    .then(data => {
+        alert(data.message);
+    })
+    .catch(error => {
+        console.error("Error:", error);
+        alert("Something went wrong!");
+    });
 }
 
 // Toast notification

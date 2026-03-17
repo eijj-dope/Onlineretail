@@ -4,28 +4,39 @@ import config
 user_routes = Blueprint("user_routes", __name__)
 
 # Login
-@user_routes.route("/login", methods=["GET","POST"])
+@user_routes.route("/login", methods=["GET", "POST"])
 def login():
     if "user_id" in session:
         return redirect("/home")
-    if request.method == "POST":
-        email = request.form["email"]
-        password = request.form["password"]
 
+    if request.method == "POST":
+        # Clean input
+        email = request.form["email"].strip()
+        password = request.form["password"].strip()
+
+        # Connect DB
         conn = config.get_db_connection()
         cursor = conn.cursor(dictionary=True)
-        cursor.execute("SELECT * FROM users WHERE email=%s AND password=%s", (email, password))
-        user = cursor.fetchone()
+
+        # Fetch user by email ONLY
+        cursor.execute("SELECT * FROM users WHERE email=%s", (email,))
+        user = cursor.fetchone()  # ✅ fetchone() returns dict because of dictionary=True
+
         cursor.close()
         conn.close()
 
         if user:
-            session["user_id"] = user["user_id"]
-            session["user_name"] = user["name"]
-            return redirect("/home")
+            # Check password manually
+            if user["password"] == password:
+                session["user_id"] = user["user_id"]
+                session["user_name"] = user["name"]
+                return redirect("/home")
+            else:
+                return "Wrong password. <a href='/login'>Try again</a>"
         else:
-            return "Invalid credentials. <a href='/login'>Try again</a>"
+            return "Email not found. <a href='/login'>Try again</a>"
 
+    # GET request
     return render_template("login.html")
 
 

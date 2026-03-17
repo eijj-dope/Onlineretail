@@ -5,62 +5,91 @@
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
+
 <div class="container mt-5">
     <h2>Checkout</h2>
+
     {% if cart_items %}
-    <div class="row">
-        <div class="col-md-6">
-            <div class="card p-4 mb-3 shadow-sm">
-                <h4>Shipping Information</h4>
-                <form>
-                    <input type="text" class="form-control mb-2" placeholder="Full Name" required>
-                    <input type="text" class="form-control mb-2" placeholder="Address" required>
-                    <input type="text" class="form-control mb-2" placeholder="City" required>
-                    <input type="text" class="form-control mb-2" placeholder="ZIP Code" required>
-                </form>
+
+    <!-- SINGLE FORM (IMPORTANT) -->
+    <form method="POST" action="/place_order">
+
+        <div class="row">
+            <!-- SHIPPING -->
+            <div class="col-md-6">
+                <div class="card p-4 mb-3 shadow-sm">
+                    <h4>Shipping Information</h4>
+
+                    <input type="text" name="fullname" class="form-control mb-2" placeholder="Full Name" required>
+
+                    <textarea name="address" class="form-control mb-2" placeholder="Full Address" required></textarea>
+
+                    <input type="text" name="city" class="form-control mb-2" placeholder="City" required>
+
+                    <input type="text" name="zip" class="form-control mb-2" placeholder="ZIP Code" required>
+                </div>
             </div>
-        </div>
-        <div class="col-md-6">
-            <div class="card p-4 mb-3 shadow-sm">
-                <h4>Payment</h4>
-                <form>
-                    <select class="form-select mb-2">
-                        <option selected>Select Payment</option>
+
+            <!-- PAYMENT -->
+            <div class="col-md-6">
+                <div class="card p-4 mb-3 shadow-sm">
+                    <h4>Payment</h4>
+
+                    <select name="payment_method" class="form-select mb-2" required>
+                        <option value="">Select Payment</option>
                         <option value="card">Credit/Debit Card</option>
                         <option value="cod">Cash on Delivery</option>
                     </select>
-                    <input type="text" class="form-control mb-2" placeholder="Card Number">
-                    <input type="text" class="form-control mb-2" placeholder="Expiry Date">
-                    <input type="text" class="form-control mb-2" placeholder="CVV">
-                </form>
+
+                    <input type="text" name="card_number" class="form-control mb-2" placeholder="Card Number">
+
+                    <input type="text" name="expiry" class="form-control mb-2" placeholder="Expiry Date">
+
+                    <input type="text" name="cvv" class="form-control mb-2" placeholder="CVV">
+                </div>
             </div>
         </div>
-    </div>
 
-    <div class="card p-4 shadow-sm">
-        <h4>Order Summary</h4>
-        <table class="table">
-            <thead>
-                <tr><th>Product</th><th>Qty</th><th>Price</th></tr>
-            </thead>
-            <tbody>
-                {% for item in cart_items %}
-                <tr>
-                    <td>{{ item.name }}</td>
-                    <td>{{ item.quantity }}</td>
-                    <td>${{ item.price }}</td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-        <div class="text-end mt-2">
-            <h5>Total: ${{ total_price }}</h5>
-            <button class="btn btn-success">Place Order</button>
+        <!-- ORDER SUMMARY -->
+        <div class="card p-4 shadow-sm">
+            <h4>Order Summary</h4>
+
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Product</th>
+                        <th>Qty</th>
+                        <th>Price</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in cart_items %}
+                    <tr>
+                        <td>{{ item.name }}</td>
+                        <td>{{ item.quantity }}</td>
+                        <td>${{ item.price }}</td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+
+            <div class="text-end mt-2">
+                <h5>Total: ${{ total_price }}</h5>
+
+                <!-- THIS BUTTON NOW WORKS -->
+                <button type="submit" class="btn btn-success">
+                    Place Order
+                </button>
+            </div>
         </div>
-    </div>
+
+    </form>
+
     {% else %}
-    <p>Your cart is empty. <a href="/products">Shop Now</a></p>
+        <p>Your cart is empty. <a href="/products">Shop Now</a></p>
     {% endif %}
+
 </div>
+
 </body>
 </html>

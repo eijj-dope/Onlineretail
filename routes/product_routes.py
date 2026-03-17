@@ -36,6 +36,7 @@ def add_to_cart():
 
     data = request.get_json()
     product_id = data.get("product_id")
+    quantity = int(data.get("quantity", 1))  # Default to 1 if not provided
     user_id = session["user_id"]
 
     if not product_id:
@@ -44,15 +45,19 @@ def add_to_cart():
     try:
         conn = get_db_connection()
         cursor = conn.cursor()
+
+        # Make sure you have UNIQUE constraint on cart_items(user_id, product_id)
         cursor.execute("""
             INSERT INTO cart_items (user_id, product_id, quantity)
-            VALUES (%s,%s,1)
-            ON DUPLICATE KEY UPDATE quantity = quantity + 1
-        """, (user_id, product_id))
+            VALUES (%s, %s, %s)
+            ON DUPLICATE KEY UPDATE quantity = quantity + %s
+        """, (user_id, product_id, quantity, quantity))
+
         conn.commit()
         cursor.close()
         conn.close()
-        return jsonify({"message": "Product added to cart!"})
+
+        return jsonify({"message": f"Added {quantity} item(s) to cart!"})
     except Exception as e:
         print("Add to cart error:", e)
         return jsonify({"message": "Error adding product to cart"}), 500
