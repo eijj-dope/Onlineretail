@@ -6,3 +6,9 @@ DB_CONFIG = {
 }
 
 SECRET_KEY = "supersecretkey123"
+
+import mysql.connector
+
+def get_db_connection():
+    conn = mysql.connector.connect(**DB_CONFIG)
+    return conn

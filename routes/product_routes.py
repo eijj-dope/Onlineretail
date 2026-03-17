@@ -1,4 +1,4 @@
-from flask import Blueprint, render_template, request, session, jsonify
+from flask import Blueprint, render_template, request, session, jsonify, redirect, url_for
 import mysql.connector
 import config
 
@@ -13,10 +13,13 @@ def get_db_connection():
     )
     return conn
 
-
 # Show products
 @product_routes.route("/products")
 def show_products():
+    # must be logged in
+    if "user_id" not in session:
+        return redirect(url_for("user_routes.login"))
+
     conn = get_db_connection()
     cursor = conn.cursor(dictionary=True)
     cursor.execute("SELECT * FROM products")
@@ -28,46 +31,28 @@ def show_products():
 # Add to cart
 @product_routes.route("/add_to_cart", methods=["POST"])
 def add_to_cart():
+    if "user_id" not in session:
+        return jsonify({"message": "Please login first!"}), 401
+
     data = request.get_json()
     product_id = data.get("product_id")
+    user_id = session["user_id"]
 
-    # initialize session cart if not exists
-    if "cart" not in session:
-        session["cart"] = {}
+    if not product_id:
+        return jsonify({"message": "No product selected!"}), 400
 
-    cart = session["cart"]
-
-    # Increase quantity if already in cart
-    if product_id in cart:
-        cart[product_id] += 1
-    else:
-        cart[product_id] = 1
-
-    session["cart"] = cart  # save back to session
-    return jsonify({"message": "Product added to cart!"})
-
-# View cart
-@product_routes.route("/cart")
-def view_cart():
-    cart = session.get("cart", {})
-    products_in_cart = []
-
-    if cart:
+    try:
         conn = get_db_connection()
-        cursor = conn.cursor(dictionary=True)
-
-        # Get product info for all product_ids in cart
-        format_strings = ','.join(['%s'] * len(cart))
-        cursor.execute(f"SELECT * FROM products WHERE product_id IN ({format_strings})", tuple(cart.keys()))
-        products_in_cart = cursor.fetchall()
+        cursor = conn.cursor()
+        cursor.execute("""
+            INSERT INTO cart_items (user_id, product_id, quantity)
+            VALUES (%s,%s,1)
+            ON DUPLICATE KEY UPDATE quantity = quantity + 1
+        """, (user_id, product_id))
+        conn.commit()
         cursor.close()
         conn.close()
-
-        # Add quantity from session cart
-        for product in products_in_cart:
-            product["quantity"] = cart[str(product["product_id"])]
-            product["total"] = product["price"] * product["quantity"]
-
-    total_price = sum(p["total"] for p in products_in_cart) if products_in_cart else 0
-
-    return render_template("cart.html", cart_items=products_in_cart, total_price=total_price)
+        return jsonify({"message": "Product added to cart!"})
+    except Exception as e:
+        print("Add to cart error:", e)
+        return jsonify({"message": "Error adding product to cart"}), 500
