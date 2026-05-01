@@ -1,0 +1,140 @@
+
+
+
+/* ================= DESIGN SYSTEM (SHOPVAULT STYLE) ================= */
+:root {
+    --primary: #3b82f6;
+    --primary-dark: #2563eb;
+    --bg: #f5f7ff;
+    --card: #ffffff;
+    --text: #0f172a;
+    --muted: #64748b;
+    --border: #e6eaf2;
+    --radius: 16px;
+}
+
+/* ================= GLOBAL ================= */
+body {
+    font-family: "Segoe UI", "DM Sans", sans-serif;
+    background: linear-gradient(180deg, #f5f7ff, #ffffff);
+    color: var(--text);
+}
+
+/* ================= AUTH PAGES (LOGIN/REGISTER) ================= */
+.auth-container {
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: linear-gradient(135deg, #eaf0ff, #ffffff);
+}
+
+.card.auth-card {
+    width: 420px;
+    padding: 30px;
+    border-radius: 20px;
+    box-shadow: 0 20px 50px rgba(0,0,0,0.08);
+}
+
+/* ================= NAVBAR ================= */
+.navbar {
+    background: white !important;
+    border-bottom: 1px solid var(--border);
+    padding: 14px 24px;
+}
+
+/* ================= SIDEBAR ================= */
+.sidebar {
+    background: white;
+    border-right: 1px solid var(--border);
+    height: 100vh;
+}
+
+.sidebar a {
+    display: block;
+    padding: 10px 14px;
+    border-radius: 10px;
+    color: var(--muted);
+    transition: 0.2s;
+}
+
+.sidebar a:hover {
+    background: #eef2ff;
+    color: var(--primary);
+}
+
+/* ================= CARDS (PRODUCT STYLE) ================= */
+.card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    box-shadow: 0 6px 18px rgba(0,0,0,0.04);
+    transition: 0.2s ease;
+}
+
+.card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 12px 30px rgba(0,0,0,0.08);
+}
+
+/* product image style (IMPORTANT FOR YOUR PEG) */
+.card-img-top {
+    height: 180px;
+    object-fit: contain;
+    background: linear-gradient(180deg, #eef2ff, #f8fafc);
+    padding: 20px;
+    border-radius: var(--radius) var(--radius) 0 0;
+}
+
+/* ================= BUTTONS ================= */
+.btn-primary {
+    background: var(--primary);
+    border: none;
+    border-radius: 12px;
+    font-weight: 600;
+}
+
+.btn-primary:hover {
+    background: var(--primary-dark);
+}
+
+/* ================= PRODUCT GRID FEEL ================= */
+.table, .container {
+    background: transparent;
+}
+
+/* ================= INPUTS ================= */
+input, select, textarea {
+    border-radius: 12px !important;
+    border: 1px solid var(--border) !important;
+    padding: 10px;
+}
+
+input:focus {
+    border-color: var(--primary) !important;
+    box-shadow: 0 0 0 3px rgba(59,130,246,0.15);
+}
+
+/* ================= BADGES ================= */
+.badge {
+    border-radius: 999px;
+    font-size: 11px;
+    padding: 5px 10px;
+}
+
+/* ================= TABLE CLEAN STYLE ================= */
+.table {
+    background: white;
+    border-radius: var(--radius);
+    overflow: hidden;
+    border: 1px solid var(--border);
+}
+
+.table thead {
+    background: #f8fafc;
+}
+
+/* ================= UTIL ================= */
+.shadow {
+    box-shadow: 0 8px 25px rgba(0,0,0,0.06) !important;
+}

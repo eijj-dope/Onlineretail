@@ -1,0 +1,54 @@
+{% extends "admin_base.html" %}
+
+{% block content %}
+
+<h2>Orders Management</h2>
+
+<table class="table mt-4 bg-white">
+    <thead class="table-dark">
+        <tr>
+            <th>Order ID</th>
+            <th>Customer</th>
+            <th>Total</th>
+            <th>Status</th>
+            <th>Date</th>
+            <th>Actions</th>
+            <th>Update</th>
+        </tr>
+    </thead>
+
+    <tbody>
+        {% for order in orders %}
+        <tr>
+            <td>{{ order.order_id }}</td>
+            <td>{{ order.name }}</td>
+            <td>${{ order.total }}</td>
+            <td>{{ order.status }}</td>
+            <td>{{ order.created_at }}</td>
+            <td>
+                <!-- ✅ VIEW BUTTON -->
+                <a href="/admin/order/{{ order.order_id }}" class="btn btn-info btn-sm mb-1">
+                    View
+                </a>
+            
+                <!-- ✅ UPDATE STATUS -->
+                <form action="/admin/update_status" method="POST" class="d-flex mt-1">
+                    <input type="hidden" name="order_id" value="{{ order.order_id }}">
+            
+                    <select name="status" class="form-select me-2">
+                        <option value="Pending" {% if order.status == "Pending" %}selected{% endif %}>Pending</option>
+                        <option value="Processing" {% if order.status == "Processing" %}selected{% endif %}>Processing</option>
+                        <option value="Shipped" {% if order.status == "Shipped" %}selected{% endif %}>Shipped</option>
+                        <option value="Completed" {% if order.status == "Completed" %}selected{% endif %}>Completed</option>
+                        <option value="Cancelled" {% if order.status == "Cancelled" %}selected{% endif %}>Cancelled</option>
+                    </select>
+            
+                    <button class="btn btn-success">Update</button>
+                </form>
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+
+{% endblock %}

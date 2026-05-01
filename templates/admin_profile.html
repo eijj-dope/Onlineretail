@@ -1,0 +1,18 @@
+{% extends "admin_base.html" %}
+
+{% block content %}
+
+<h2>Admin Profile</h2>
+
+<div class="card p-4 shadow mt-4" style="max-width: 400px;">
+    <h5>Name:</h5>
+    <p>{{ session.user_name }}</p>
+
+    <h5>Role:</h5>
+    <p>{{ session.role }}</p>
+
+    <h5>User ID:</h5>
+    <p>{{ session.user_id }}</p>
+</div>
+
+{% endblock %}

@@ -53,6 +53,10 @@
         <!-- ORDER SUMMARY -->
         <div class="card p-4 shadow-sm">
             <h4>Order Summary</h4>
+            {% for item in cart_items %}
+                <input type="hidden" name="selected_items" value="{{ item.product_id }}">
+                <input type="hidden" name="checkout_qty_{{ item.product_id }}" value="{{ item.checkout_qty }}">
+            {% endfor %}
 
             <table class="table">
                 <thead>

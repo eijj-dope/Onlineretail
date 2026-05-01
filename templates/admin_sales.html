@@ -1,0 +1,57 @@
+{% extends "admin_base.html" %}
+
+{% block content %}
+
+<h2>Sales Dashboard</h2>
+
+<div class="row mt-4">
+
+    <div class="col-md-4">
+        <div class="card p-4 shadow">
+            <h5>Total Sales</h5>
+            <h2 class="text-success">${{ total_sales }}</h2>
+        </div>
+    </div>
+
+    <div class="col-md-4">
+        <div class="card p-4 shadow">
+            <h5>Total Orders</h5>
+            <h2>{{ total_orders }}</h2>
+        </div>
+    </div>
+
+</div>
+
+<!-- ✅ ADD THIS PART (YOU WERE MISSING THIS) -->
+<div class="card p-4 shadow mt-4">
+    <h5>Sales Overview</h5>
+    <canvas id="salesChart"></canvas>
+</div>
+
+<!-- ✅ CHART SCRIPT -->
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+<script>
+const labels = {{ dates | tojson | safe }};
+const data = {{ totals | tojson | safe }};
+
+const ctx = document.getElementById('salesChart');
+
+new Chart(ctx, {
+    type: 'line',
+    data: {
+        labels: labels,
+        datasets: [{
+            label: 'Sales',
+            data: data,
+            borderWidth: 1,
+            tension: 0.3
+        }]
+    },
+    options: {
+        responsive: true
+    }
+});
+</script>
+
+{% endblock %}
