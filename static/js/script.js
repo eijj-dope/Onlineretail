@@ -1,7 +1,7 @@
 // ================= ADD TO CART =================
 function addToCart(productId) {
     const qtyInput = document.getElementById(`qty-${productId}`);
-    const quantity = qtyInput ? parseInt(qtyInput.value) : 1;
+    const qty = qtyInput && qtyInput.value ? parseInt(qtyInput.value) : 1;
 
     fetch("/add_to_cart", {
         method: "POST",
@@ -10,26 +10,34 @@ function addToCart(productId) {
         },
         body: JSON.stringify({
             product_id: productId,
-            quantity: quantity
+            quantity: qty
         })
     })
     .then(res => res.json())
-    .then(data => showToast(data.message))
-    .catch(() => showToast("Something went wrong!"));
+    .then(data => {
+        showToast(data.message); // use alert first (for testing)
+    })
+    .catch(err => console.error(err));
 }
 
-// ================= TOAST =================
-function showToast(message) {
+function showToast(message, type = "success") {
     let toast = document.getElementById("toast");
 
     if (!toast) {
         toast = document.createElement("div");
         toast.id = "toast";
+        toast.className = "toast-box"; // IMPORTANT
         document.body.appendChild(toast);
     }
 
     toast.textContent = message;
-    toast.classList.add("show");
+
+    // reset + apply styles
+    toast.className = "toast-box show";
+
+    if (type === "error") {
+        toast.classList.add("toast-error");
+    }
 
     setTimeout(() => {
         toast.classList.remove("show");

@@ -7,7 +7,7 @@ user_routes = Blueprint("user_routes", __name__)
 @user_routes.route("/login", methods=["GET", "POST"])
 def login():
     if "user_id" in session:
-        return redirect("/home")
+        return redirect("/products")
 
     # GET request
     if request.method == "GET":
@@ -36,19 +36,19 @@ def login():
             if user["role"] == "admin":
                 return redirect("/admin/dashboard")
             else:
-                return redirect("/home")
+                return redirect("/products")
 
         else:
             return "Wrong password. <a href='/login'>Try again</a>"
 
-    return "User not found. <a href='/login'>Try again</a>"
+    return redirect("/register?error=user_not_found") 
 
 
 # Register
 @user_routes.route("/register", methods=["GET","POST"])
 def register():
     if "user_id" in session:
-        return redirect("/home")
+        return redirect("/products")
     if request.method == "POST":
         name = request.form["name"]
         email = request.form["email"]
@@ -88,6 +88,13 @@ def my_orders():
     conn.close()
 
     return render_template("my_orders.html", orders=orders)
+
+@user_routes.route("/profile")
+def profile():
+    if "user_id" not in session:
+        return redirect("/login")
+
+    return render_template("profile.html")
 
 @user_routes.route("/cancel_order/<int:order_id>")
 def cancel_order(order_id):

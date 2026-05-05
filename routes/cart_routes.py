@@ -71,8 +71,15 @@ def checkout():
         item = cursor.fetchone()
 
         if item:
-            # ✅ get chosen quantity
-            checkout_qty = int(request.form.get(f"checkout_qty_{product_id}", 1))
+    # ✅ SAFE quantity handling
+            qty_str = request.form.get(f"checkout_qty_{product_id}", "").strip()
+
+            try:
+                checkout_qty = int(qty_str)
+                if checkout_qty < 1:
+                    checkout_qty = 1
+            except:
+                checkout_qty = 1
 
             # prevent over checkout
             if checkout_qty > item["quantity"]:

@@ -20,15 +20,8 @@ def index():
     if "user_id" in session:
         if session.get("role") == "admin":
             return redirect("/admin/dashboard")
-        return redirect("/home")
+        return redirect("/products")
     return redirect("/login")  # Redirect to login page if not logged in
-
-# Home page after login
-@app.route("/home")
-def home():
-    if "user_id" not in session:
-        return redirect("/")
-    return render_template("home.html")
 
 # Optional: 404
 @app.errorhandler(404)

@@ -221,19 +221,27 @@ def admin_sales():
     conn = get_db_connection()
     cursor = conn.cursor()
 
-    cursor.execute("SELECT SUM(total) FROM orders")
+    cursor.execute("""
+    SELECT SUM(total)
+    FROM orders
+    WHERE status = 'Delivered'
+    """)
     total_sales = cursor.fetchone()[0] or 0
 
-    cursor.execute("SELECT COUNT(*) FROM orders")
+    cursor.execute("""
+    SELECT COUNT(*)
+    FROM orders
+    WHERE status = 'Delivered'
+    """)
     total_orders = cursor.fetchone()[0]
 
     cursor.execute("""
-        SELECT DATE(created_at), SUM(total)
-        FROM orders
-        GROUP BY DATE(created_at)
-        ORDER BY DATE(created_at)
+    SELECT DATE(created_at), SUM(total)
+    FROM orders
+    WHERE status = 'Delivered'
+    GROUP BY DATE(created_at)
+    ORDER BY DATE(created_at)
     """)
-
     sales_data = cursor.fetchall()
 
     cursor.close()

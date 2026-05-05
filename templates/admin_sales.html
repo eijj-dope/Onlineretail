@@ -9,47 +9,46 @@
     <div class="col-md-4">
         <div class="card p-4 shadow">
             <h5>Total Sales</h5>
-            <h2 class="text-success">${{ total_sales }}</h2>
+            <h2 class="text-success">${{ total_sales or 0 }}</h2>
         </div>
     </div>
 
     <div class="col-md-4">
         <div class="card p-4 shadow">
             <h5>Total Orders</h5>
-            <h2>{{ total_orders }}</h2>
+            <h2>{{ total_orders or 0 }}</h2>
         </div>
     </div>
 
 </div>
 
-<!-- ✅ ADD THIS PART (YOU WERE MISSING THIS) -->
 <div class="card p-4 shadow mt-4">
     <h5>Sales Overview</h5>
-    <canvas id="salesChart"></canvas>
+    <div style="height:300px;">
+        <canvas id="salesChart"></canvas>
+    </div>
 </div>
 
-<!-- ✅ CHART SCRIPT -->
 <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <script>
-const labels = {{ dates | tojson | safe }};
-const data = {{ totals | tojson | safe }};
+const labels = {{ dates or [] | tojson }};
+const data = {{ totals or [] | tojson }};
 
-const ctx = document.getElementById('salesChart');
-
-new Chart(ctx, {
+new Chart(document.getElementById('salesChart'), {
     type: 'line',
     data: {
         labels: labels,
         datasets: [{
             label: 'Sales',
             data: data,
-            borderWidth: 1,
+            borderWidth: 2,
             tension: 0.3
         }]
     },
     options: {
-        responsive: true
+        responsive: true,
+        maintainAspectRatio: false
     }
 });
 </script>

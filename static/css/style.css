@@ -16,7 +16,7 @@
 /* ================= GLOBAL ================= */
 body {
     font-family: "Segoe UI", "DM Sans", sans-serif;
-    background: linear-gradient(180deg, #f5f7ff, #ffffff);
+    background: #f1f5f9;
     color: var(--text);
 }
 
@@ -44,23 +44,54 @@ body {
 }
 
 /* ================= SIDEBAR ================= */
+/* SIDEBAR */
 .sidebar {
-    background: white;
-    border-right: 1px solid var(--border);
     height: 100vh;
+    background: #1e293b; /* dark navy instead of purple */
+    color: #fff;
+    padding: 20px;
 }
 
+/* Title */
+.sidebar h4 {
+    font-weight: 600;
+    margin-bottom: 20px;
+}
+
+/* Links */
 .sidebar a {
     display: block;
     padding: 10px 14px;
+    margin-bottom: 8px;
+    color: #cbd5e1; /* soft gray */
+    text-decoration: none;
     border-radius: 10px;
-    color: var(--muted);
-    transition: 0.2s;
+    transition: all 0.2s ease;
+    font-size: 14px;
 }
 
+/* Hover */
 .sidebar a:hover {
-    background: #eef2ff;
-    color: var(--primary);
+    background: #334155;
+    color: #fff;
+    transform: translateX(4px);
+}
+
+/* Active link */
+.sidebar a.active {
+    background: #3b82f6;
+    color: white;
+}
+
+/* Logout (danger style) */
+.sidebar a:last-child {
+    margin-top: 20px;
+    color: #f87171;
+}
+
+.sidebar a:last-child:hover {
+    background: #7f1d1d;
+    color: white;
 }
 
 /* ================= CARDS (PRODUCT STYLE) ================= */
@@ -137,4 +168,106 @@ input:focus {
 /* ================= UTIL ================= */
 .shadow {
     box-shadow: 0 8px 25px rgba(0,0,0,0.06) !important;
+}
+
+/* PAGE BACKGROUND */X
+
+/* PRODUCT CARD */
+.product-card {
+    border-radius: 18px;
+    overflow: hidden;
+    transition: all 0.3s ease;
+    background: #fff;
+}
+
+.product-card:hover {
+    transform: translateY(-8px);
+    box-shadow: 0 18px 40px rgba(0,0,0,0.12);
+}
+
+/* IMAGE AREA */
+.product-img {
+    height: 200px;
+    background: linear-gradient(180deg, #eef2ff, #f8fafc);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 15px;
+}
+
+.product-img img {
+    max-height: 100%;
+    max-width: 100%;
+    object-fit: contain;
+    transition: 0.3s;
+}
+
+.product-card:hover .product-img img {
+    transform: scale(1.08);
+}
+
+/* IMAGE AREA */
+.product-img {
+    height: 180px;
+    background: #f8fafc;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 10px;
+}
+
+.product-img img {
+    max-height: 100%;
+    max-width: 100%;
+    object-fit: contain;
+}
+
+/* PRICE */
+.price {
+    font-weight: bold;
+    color: #3b82f6;
+    font-size: 18px;
+}
+
+/* INPUT */
+.qty-input {
+    width: 70px;
+    border-radius: 10px;
+    text-align: center;
+}
+
+/* BUTTON */
+.add-btn {
+    border-radius: 10px;
+    padding: 6px 14px;
+}
+
+/* NAVBAR IMPROVEMENT */
+.navbar {
+    box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+}
+
+/* TOAST NOTIFICATION */
+.toast-box {
+    position: fixed;
+    bottom: 20px;
+    right: 20px;
+    background: #16a34a;
+    color: white;
+    padding: 12px 18px;
+    border-radius: 10px;
+    font-size: 14px;
+    opacity: 0;
+    transform: translateY(20px);
+    transition: all 0.3s ease;
+    z-index: 9999;
+}
+
+.toast-box.show {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.toast-error {
+    background: #dc2626;
 }

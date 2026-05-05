@@ -35,18 +35,27 @@ def add_to_cart():
         return jsonify({"message": "Please login first!"}), 401
 
     data = request.get_json()
-    product_id = data.get("product_id")
-    quantity = int(data.get("quantity", 1))  # Default to 1 if not provided
-    user_id = session["user_id"]
 
-    if not product_id:
-        return jsonify({"message": "No product selected!"}), 400
+    try:
+        product_id = int(data.get("product_id"))
+    except:
+        return jsonify({"message": "Invalid product"}), 400
+
+    qty_raw = str(data.get("quantity", "")).strip()
+
+    try:
+        quantity = int(qty_raw) if qty_raw else 1
+        if quantity < 1:
+            quantity = 1
+    except:
+        quantity = 1
+
+    user_id = session["user_id"]
 
     try:
         conn = get_db_connection()
         cursor = conn.cursor()
 
-        # Make sure you have UNIQUE constraint on cart_items(user_id, product_id)
         cursor.execute("""
             INSERT INTO cart_items (user_id, product_id, quantity)
             VALUES (%s, %s, %s)
@@ -54,10 +63,14 @@ def add_to_cart():
         """, (user_id, product_id, quantity, quantity))
 
         conn.commit()
+
+        print("✅ ADDED:", user_id, product_id, quantity)  # DEBUG
+
         cursor.close()
         conn.close()
 
-        return jsonify({"message": f"Added {quantity} item(s) to cart!"})
+        return jsonify({"message": "Added to cart!"})
+
     except Exception as e:
-        print("Add to cart error:", e)
-        return jsonify({"message": "Error adding product to cart"}), 500
+        print("❌ ERROR:", e)
+        return jsonify({"message": "Database error"}), 500
